@@ -16,9 +16,11 @@ type Card {
 }
 
 type Mutation {
+  deleteCard(id: Int!): Card!
   login(email: String!, password: String!): AuthPayload!
-  post(description: String, title: String!, url: String!): Card!
+  newCard(description: String, title: String!, url: String!): Card!
   signup(email: String!, password: String!, role: String): AuthPayload!
+  updateCard(description: String, id: Int!, title: String, url: String): Card!
 }
 
 type Query {

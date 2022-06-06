@@ -1,4 +1,11 @@
-import { extendType, nonNull, nullable, objectType, stringArg } from "nexus";
+import {
+  extendType,
+  intArg,
+  nonNull,
+  nullable,
+  objectType,
+  stringArg,
+} from "nexus";
 
 export const Card = objectType({
   name: "Card",
@@ -33,7 +40,7 @@ export const CardQuery = extendType({
 export const CardMutation = extendType({
   type: "Mutation",
   definition(t) {
-    t.nonNull.field("post", {
+    t.nonNull.field("newCard", {
       type: "Card",
       args: {
         title: nonNull(stringArg()),
@@ -41,21 +48,64 @@ export const CardMutation = extendType({
         description: nullable(stringArg()),
       },
       resolve(parent, args, context) {
-        const { title,  url } = args;
-        const {userId} = context
+        const { title, url } = args;
+        const { userId } = context;
 
         if (!userId) {
-          throw new Error("Login is required")
+          throw new Error("Login is required");
         }
         const card = context.prisma.card.create({
           data: {
             title,
             url,
             description: args.description ?? "",
-            user: {connect:{id: userId}}
+            user: { connect: { id: userId } },
           },
         });
         return card;
+      },
+    });
+    t.nonNull.field("updateCard", {
+      type: "Card",
+      args: {
+        id: nonNull(intArg()),
+        url: nullable(stringArg()),
+        description: nullable(stringArg()),
+        title: nullable(stringArg()),
+      },
+      resolve(parent, args, context) {
+        const { userId } = context;
+
+        if (!userId) {
+          throw new Error("Login is required");
+        }
+        const updatedCard = context.prisma.card.update({
+          where: { id: args.id },
+          data: {
+            description: args?.description,
+            title: args?.title || undefined,
+            url: args?.url || undefined,
+          },
+        });
+        return updatedCard;
+      },
+    });
+    t.nonNull.field("deleteCard", {
+      type: "Card",
+      args: {
+        id: nonNull(intArg()),
+      },
+      resolve(parent, args, context) {
+        const { userId } = context;
+
+        if (!userId) {
+          throw new Error("Login is required");
+        }
+        const { id } = args;
+        const deletedCard = context.prisma.card.delete({
+          where: { id },
+        });
+        return deletedCard;
       },
     });
   },
