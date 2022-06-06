@@ -7,8 +7,11 @@
   "private": false,
   "scripts": {
     "generate": "npx ts-node --transpile-only src/schema",
-    "start": "ts-node-dev --transpile-only --no-notify --exit-child src/index.ts",
-    "build": "prisma generate && yarn run generate && tsc"
+    "start": "node dist/src/index.js",
+    "build": "prisma generate && yarn run generate && tsc",
+    "prettier-format": "prettier 'src/**/*.ts' --write",
+    "migrate:deploy": "prisma migrate deploy",
+    "dev": "ts-node-dev --transpile-only --no-notify --exit-child src/index.ts"
   },
   "devDependencies": {
     "prisma": "^3.14.0",
