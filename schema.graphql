@@ -8,23 +8,34 @@ type AuthPayload {
 }
 
 type Card {
-  description: String
+  category: Category
+  content: String
+  done: Boolean
   id: Int!
   title: String!
-  url: String!
   user: User
+}
+
+type Category {
+  cards: [Card!]!
+  id: Int!
+  summary: String
+  title: String!
 }
 
 type Mutation {
   deleteCard(id: Int!): Card!
   login(email: String!, password: String!): AuthPayload!
-  newCard(description: String, title: String!, url: String!): Card!
+  markDone(id: Int!): Card!
+  newCard(category: Int!, content: String!, title: String!): Card!
+  newCategory(summary: String, title: String!): Category!
   signup(email: String!, password: String!, role: String): AuthPayload!
-  updateCard(description: String, id: Int!, title: String, url: String): Card!
+  updateCard(content: String, id: Int!, title: String): Card!
 }
 
 type Query {
-  feed: [Card!]!
+  cards: [Card!]!
+  categories: [Category!]!
 }
 
 type User {

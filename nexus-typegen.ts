@@ -33,10 +33,15 @@ export interface NexusGenObjects {
     user?: NexusGenRootTypes['User'] | null; // User
   }
   Card: { // root type
-    description?: string | null; // String
+    content?: string | null; // String
+    done?: boolean | null; // Boolean
     id: number; // Int!
     title: string; // String!
-    url: string; // String!
+  }
+  Category: { // root type
+    id: number; // Int!
+    summary?: string | null; // String
+    title: string; // String!
   }
   Mutation: {};
   Query: {};
@@ -64,21 +69,31 @@ export interface NexusGenFieldTypes {
     user: NexusGenRootTypes['User'] | null; // User
   }
   Card: { // field return type
-    description: string | null; // String
+    category: NexusGenRootTypes['Category'] | null; // Category
+    content: string | null; // String
+    done: boolean | null; // Boolean
     id: number; // Int!
     title: string; // String!
-    url: string; // String!
     user: NexusGenRootTypes['User'] | null; // User
+  }
+  Category: { // field return type
+    cards: NexusGenRootTypes['Card'][]; // [Card!]!
+    id: number; // Int!
+    summary: string | null; // String
+    title: string; // String!
   }
   Mutation: { // field return type
     deleteCard: NexusGenRootTypes['Card']; // Card!
     login: NexusGenRootTypes['AuthPayload']; // AuthPayload!
+    markDone: NexusGenRootTypes['Card']; // Card!
     newCard: NexusGenRootTypes['Card']; // Card!
+    newCategory: NexusGenRootTypes['Category']; // Category!
     signup: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     updateCard: NexusGenRootTypes['Card']; // Card!
   }
   Query: { // field return type
-    feed: NexusGenRootTypes['Card'][]; // [Card!]!
+    cards: NexusGenRootTypes['Card'][]; // [Card!]!
+    categories: NexusGenRootTypes['Category'][]; // [Category!]!
   }
   User: { // field return type
     cards: NexusGenRootTypes['Card'][]; // [Card!]!
@@ -95,21 +110,31 @@ export interface NexusGenFieldTypeNames {
     user: 'User'
   }
   Card: { // field return type name
-    description: 'String'
+    category: 'Category'
+    content: 'String'
+    done: 'Boolean'
     id: 'Int'
     title: 'String'
-    url: 'String'
     user: 'User'
+  }
+  Category: { // field return type name
+    cards: 'Card'
+    id: 'Int'
+    summary: 'String'
+    title: 'String'
   }
   Mutation: { // field return type name
     deleteCard: 'Card'
     login: 'AuthPayload'
+    markDone: 'Card'
     newCard: 'Card'
+    newCategory: 'Category'
     signup: 'AuthPayload'
     updateCard: 'Card'
   }
   Query: { // field return type name
-    feed: 'Card'
+    cards: 'Card'
+    categories: 'Category'
   }
   User: { // field return type name
     cards: 'Card'
@@ -129,10 +154,17 @@ export interface NexusGenArgTypes {
       email: string; // String!
       password: string; // String!
     }
+    markDone: { // args
+      id: number; // Int!
+    }
     newCard: { // args
-      description?: string | null; // String
+      category: number; // Int!
+      content: string; // String!
       title: string; // String!
-      url: string; // String!
+    }
+    newCategory: { // args
+      summary?: string | null; // String
+      title: string; // String!
     }
     signup: { // args
       email: string; // String!
@@ -140,10 +172,9 @@ export interface NexusGenArgTypes {
       role?: string | null; // String
     }
     updateCard: { // args
-      description?: string | null; // String
+      content?: string | null; // String
       id: number; // Int!
       title?: string | null; // String
-      url?: string | null; // String
     }
   }
 }
